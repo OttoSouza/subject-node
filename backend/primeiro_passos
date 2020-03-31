@@ -1,0 +1,94 @@
+node = {
+    o que é ? definido como um ambiente de execução Javascript. Criado pela google, denvolvolvida em cima
+    do "engine V8" que alem de ser executado no browser é executado no lado do servidor, no caso o JavaScript;
+}  
+
+dependencias/frameworks = {
+
+    express -> biblioteca permitindo que os desenvolvedores criem todo tipo de aplicativos e ferramentas do lado servidor em JavaScript.
+    nodemon -> biblioteca para verificação da aplicação. 
+    knex -> é um contrutor de consultas sql para diversos bancos;
+    celebrate, serialize;
+    cross-env - genrenciar variaveis de ambiente;
+}
+
+METODOS HTTP = {
+
+    GET -> Listagem, obter algo
+    POST -> criar, enviar algo
+    PUT -> alterar
+    DELETE -> deletar
+    
+}
+
+
+rotas = {
+
+    Tipos de parametros
+    Query Params: parametros nomeados enviados na rota por uma '?' (filtros, paginação);
+    exemplo: " "
+
+    Route Params: parametros utilizados para identificar recursos(entidades) unicos; (id, nome)
+    exemplo: " "
+    
+    Request Body: Corpo da requisição que ser para alterar ou criar recursos(entedidades);
+    exemplo: " " 
+
+
+    request = solicitação; (usuario manda para api);
+    response = resposta;   (api manda para o usuario);
+
+    express.json();
+
+}
+
+banco de dados = {
+    NoSql = MongoDB, CouuchDb, etc;
+
+    Sql = Postgres, MySql, SqlLite, Oracle, etc;
+
+    diferença => 
+    NoSql sao bancos que guardam seus valores em um unico registro, no caso em um unico documento;
+    Sql -> Existe uma divsao entre seus relacionamentos;
+}
+
+instalação do banco = {
+
+    propria biblioteca  = o driver. 
+    "SELECT * FROM USUARIO WHERE(usuario.id = id);"
+
+    QUERY BUILDER = table(usuario).select(*).where("id", id)
+
+    1̣̣ Passo
+        - utilizar a dependencia chamada 'knex' ver documentação;
+
+    2 Passo
+     executar = npx knex init 
+     irar gerar o arquivo de configuração;
+
+     configurar qual banco que quer usar; (ver documentação)
+
+    3 passo (Migrations)
+    Forma de criar tabela, mantendo um historico, alteradas , como se fosse um historico do banco de dados;
+        - criar a primeira migration: "knex migrate:make "migration_name""
+
+    4- Criar um arquivo "connection" dendro de confi e começar  a implementar os controllers;
+   
+}
+
+validações = {
+    usa-se quando cria ou altera-se algo;
+    framework - > celebrate
+}
+
+testes = {
+    por que fazer testes? 
+        imagine uma aplicação com sentenas de funcionalidades, paginas;
+        
+    o que é TDD? (teste drive development
+    
+    alguns framework de teste: 
+    Mocha, Jest, SuperTest, etc;
+
+
+}
