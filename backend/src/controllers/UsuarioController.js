@@ -1,46 +1,69 @@
 const connection = require("../config/connection");
+const excepions = require("../messages/exceptions");
+
+const messagesEx = require("../messages/exceptionsMessages");
+
 module.exports = {
   async listar_usuarios(request, response) {
-    const usuarios = await connection("usuarios").select('*');
-
-    return response.json(usuarios);
+    try {
+      const usuarios = await connection("usuarios").select("*");
+      return response.status(200).json(usuarios);
+    } catch (error) {
+      return response.status(200).send({ err: messagesEx.erro_listar_usuario });
+    }
   },
 
   async salvar_usuario(request, response) {
-    const { nome, senha } = request.body;
+    try {
+      const { nome, senha } = request.body;
+      const usuario = await connection("usuarios")
+        .insert({
+          nome,
+          senha
+        })
+        .returning("*");
 
-    await connection("usuarios").insert({
-      nome,
-      senha
-    });
-
-    return response.json({nome});
+      return response.status(201).send(usuario);
+    } catch (error) {
+      return response.status(400).send({ err: messagesEx.erro_salvar_usuario });
+    }
   },
 
-  async atualizar_usuario(request, response){
+  async atualizar_usuario(request, response) {
+    try {
       const { id } = request.params;
-      const {nome, senha} = request.body;
-      const usuario = await connection('usuarios').where("id", id).first();
+      const { nome, senha } = request.body;
 
-      if(!usuario) {
-        return response.status(401).json({err: 'Usuario não existe'})
-      }
+      const usuario = await connection("usuarios")
+        .update({
+          nome,
+          senha
+        })
+        .where("id", id)
+        .returning("*");
 
-      await connection('usuarios').where('id', id).update({nome, senha}); 
-      return response.status(200).send('Usuário modificado com sucesso')
+      return response.status(200).send(usuario);
+    } catch (error) {
+      return response
+        .status(401)
+        .send({ err: messagesEx.erro_atualizar_usuario });
+    }
   },
-  
+
   async deletar_usuario(request, response) {
+    try {
       const { id } = request.params;
-      const usuario = await connection('usuarios').where("id", id).first();
 
-      if(!usuario) {
-        return response.status(401).json({err: 'Usuario não nao existe'})
-      }
+      await connection("usuarios")
+        .select("id")
+        .where("id", id)
+        .delete();
 
-      await connection('usuarios').where('id', id).delete();
-      return response.status(204).send(); 
+      return response.status(204).send("Usuario deletado com sucesso");
+    } catch (error) {
+      return response
+        .status(400)
+        .send({ err: messagesEx.erro_deletar_usuario });
+    }
   }
-
-
 };

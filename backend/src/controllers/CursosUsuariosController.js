@@ -7,5 +7,5 @@ module.exports = {
       .where("id_usuario", id_usuario)
       .select("*");
     return response.json(cursos);
-  },
+  }
 };

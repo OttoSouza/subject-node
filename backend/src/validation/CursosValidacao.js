@@ -40,9 +40,10 @@ const cursos_validacao_put = celebrate({
       .required()
       .empty("")
   }),
+
   [Segments.PARAMS]: Joi.object().keys({
-    id: Joi.number().required() 
-  }),
+    id: Joi.number().required()
+  })
 });
 
 module.exports = { cursos_validacao_post, cursos_validacao_put };

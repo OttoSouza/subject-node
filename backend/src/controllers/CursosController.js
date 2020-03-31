@@ -1,66 +1,70 @@
 const connection = require("../config/connection");
 module.exports = {
   async listar_cursos(request, response) {
-    const cursos = await connection("cursos").select("*");
+    const offset = request.headers.offset;
+    const cursos = await connection("cursos")
+      .select("*")
+      .limit(5)
+      .offset(offset);
     response.json(cursos);
   },
 
   async salvar_cursos(request, response) {
-    const { nome, descricao, carga_horaria, certificacao } = request.body;
-    const id_usuario = request.headers.authorization;
+    try {
+      const { nome, descricao, carga_horaria, certificacao } = request.body;
+      const id_usuario = request.headers.authorization;
 
-    await connection("cursos").insert({
-      nome,
-      descricao,
-      carga_horaria,
-      certificacao,
-      id_usuario
-    });
-    return response.status(204).send();
+      const cursos = await connection("cursos")
+        .insert({
+          nome,
+          descricao,
+          carga_horaria,
+          certificacao,
+          id_usuario
+        })
+        .returning("*");
+
+      return response.status(201).send(cursos);
+    } catch (error) {
+      return response.status(400).send(error.message);
+    }
   },
 
   async atualizar_curso(request, response) {
-    const { nome, descricao, carga_horaria, certificacao } = request.body;
-    const { id } = request.params;
-    const id_usuario = request.headers.authorization;
+    try {
+      const { nome, descricao, carga_horaria, certificacao } = request.body;
+      const { id } = request.params;
+      const id_usuario = request.headers.authorization;
 
-    const usuario = await connection("usuarios")
-      .where("id", id_usuario)
-      .first();
+      const cursos_atualizado = await connection("cursos")
+        .where({ id: id, id_usuario: id_usuario })
+        .update({
+          nome,
+          descricao,
+          carga_horaria,
+          certificacao
+        })
+        .returning("*");
 
-    if (!usuario) {
-      return response.status(401).send("Usuario nao existe");
+      return response.status(200).send(cursos_atualizado);
+    } catch (error) {
+      return response.status(400).send(error.message);
     }
-
-    await connection("cursos")
-      .where("id", id)
-      .select("id_usuario")
-      .update({
-        nome,
-        descricao,
-        carga_horaria,
-        certificacao
-      });
-
-    return response.status(204).send();
   },
 
   async deletar_cursos(request, response) {
-    const { id } = request.params;
-    const id_usuario = request.headers.authorization;
+    try {
+      const { id } = request.params;
+      const id_usuario = request.headers.authorization;
 
-    const usuario = await connection("usuarios")
-      .where("id", id_usuario)
-      .first();
+      const usuario_deletado = await connection("cursos")
+        .where({ 'id': id, 'id_usuario': id_usuario })
+        .delete()
+        .returning("*");
 
-    if (!usuario) {
-      return response.status(401).json({ err: "Usuario não encontrado" });
+      return response.status(204).send(usuario_deletado);
+    } catch (error) {
+      return response.status(400).send(erro.message);
     }
-
-    await connection("cursos")
-      .where("id", id)
-      .delete();
-
-    return response.status(204).send();
   }
 };

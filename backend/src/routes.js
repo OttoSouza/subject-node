@@ -17,8 +17,10 @@ const routes = express.Router();
 //Sessions
 routes.post("/sessions", SessionController.authentication);
 
+
 //Cursos
 routes.get("/cursos", CursosController.listar_cursos);
+
 routes.post("/cursos", cursos_validacao_post, CursosController.salvar_cursos);
 routes.put(
   "/atualizar_cursos/:id",
@@ -33,8 +35,10 @@ routes.get(
   CursosUsuariosController.listar_cursos_usuarios
 );
 
+
 //Usuarios
 routes.get("/usuarios", UsuarioController.listar_usuarios);
+
 routes.post(
   "/usuarios",
   usuario_validacao_post,

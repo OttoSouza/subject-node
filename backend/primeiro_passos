@@ -85,7 +85,7 @@ testes = {
     por que fazer testes? 
         imagine uma aplicação com sentenas de funcionalidades, paginas;
         
-    o que é TDD? (teste drive development
+    o que é TDD? (teste drive development)
     
     alguns framework de teste: 
     Mocha, Jest, SuperTest, etc;
